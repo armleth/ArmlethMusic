@@ -39,7 +39,7 @@ async def leave(ctx):
         await ctx.send("The bot is not connected to a voice channel.")
 
 
-@bot.command(name='play_song', help='To play song')
+@bot.command(name='play', help='To play song')
 async def play(ctx,url):
     try :
         server = ctx.message.guild
