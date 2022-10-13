@@ -5,11 +5,10 @@ from discord.ext import commands,tasks
 import discord
 from dotenv import load_dotenv
 from youtube_dl import YoutubeDL
-from youtubesearchpython import VideosSearch
-from boto.s3.connection import S3Connection
+from youtubesearchpython import VideosSearc
 
 load_dotenv()
-TOKEN = S3Connection(os.environ['DISCORD_TOKEN'], os.environ['DISCORD_TOKEN'])
+TOKEN = os.environ['DISCORD_TOKEN']
 
 #print(TOKEN)
 
