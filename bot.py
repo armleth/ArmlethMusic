@@ -5,7 +5,7 @@ from discord.ext import commands,tasks
 import discord
 from dotenv import load_dotenv
 from youtube_dl import YoutubeDL
-from youtubesearchpython import VideosSearc
+from youtubesearchpython import VideosSearch
 
 load_dotenv()
 TOKEN = os.environ['DISCORD_TOKEN']
