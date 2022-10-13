@@ -17,6 +17,7 @@ intents = discord.Intents.all()
 client = discord.Client(intents=intents)
 bot = commands.Bot(command_prefix='?',intents=intents)
 
+queue = []
 
 # Bot commands
 @bot.command(name='join', help='Tells the bot to join the voice channel')
@@ -42,26 +43,35 @@ async def leave(ctx):
 @bot.command(name='play', help='To play song')
 async def play(ctx,url):
     try :
-        server = ctx.message.guild
-        voice_channel = server.voice_client
-
-        YDL_OPTIONS = {'format': 'bestaudio', 'noplaylist': 'True'}
-        FFMPEG_OPTIONS = {
-        'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5', 'options': '-vn'}
+        voice_client = ctx.message.guild.voice_client
         
         videosSearch = VideosSearch(url,limit = 1)
 
         title = videosSearch.result()['result'][0]['title']
         url = videosSearch.result()['result'][0]['link']
+        
+        if voice_client.is_playing():
+            queue.append(url);
+            await ctx.send("La musique a été mise en queue")
+            for i in queue:
+                await ctx.send(i)
+        else:
+            
+            YDL_OPTIONS = {'format': 'bestaudio', 'noplaylist': 'True'}
+            FFMPEG_OPTIONS = {
+            'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5', 'options': '-vn'}
+        
+            server = ctx.message.guild
+            voice_channel = server.voice_client
 
-        async with ctx.typing():
-            with YoutubeDL(YDL_OPTIONS) as ydl:
-                info = ydl.extract_info(url, download=False)
+            async with ctx.typing():
+                with YoutubeDL(YDL_OPTIONS) as ydl:
+                    info = ydl.extract_info(url, download=False)
 
-            URL = info['url']
+                URL = info['url']
 
-            voice_channel.play(discord.FFmpegPCMAudio(URL, **FFMPEG_OPTIONS))
-        await ctx.send('**Now playing: ' + info['title'] + '**')
+                voice_channel.play(discord.FFmpegPCMAudio(URL, **FFMPEG_OPTIONS))
+            await ctx.send('**Now playing: ' + info['title'] + '**')
     except:
         await ctx.send("The bot is not connected to a voice channel.")
 
