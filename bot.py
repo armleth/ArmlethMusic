@@ -1,7 +1,7 @@
 # bot.py
 
 import os
-from discord.ext import commands,tasks
+from discord.ext import commands, tasks
 import discord
 from dotenv import load_dotenv
 from youtube_dl import YoutubeDL
