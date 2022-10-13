@@ -35,6 +35,7 @@ async def leave(ctx):
     voice_client = ctx.message.guild.voice_client
     
     if voice_client.is_connected():
+        queue = []
         await voice_client.disconnect()
     else:
         await ctx.send("The bot is not connected to a voice channel.")
