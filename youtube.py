@@ -1,14 +1,6 @@
-from __future__ import unicode_literals
-import youtube_dl
+from youtubesearchpython import VideosSearch
 
-ydl_opts = {
-    'format': 'bestaudio/best',
-    'postprocessors': [{
-        'key': 'FFmpegExtractAudio',
-        'preferredcodec': 'mp3',
-        'preferredquality': '192',
-    }],
-}
+videosSearch = VideosSearch("Minecraft",limit = 1)
 
-with youtube_dl.YoutubeDL(ydl_opts) as ydl:
-    ydl.download(['https://www.youtube.com/watch?v=JZHlEbZms8U'])
+print(videosSearch.result()['result'][0]['title'])
+print(videosSearch.result()['result'][0]['link'])

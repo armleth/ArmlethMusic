@@ -4,8 +4,8 @@ import os
 from discord.ext import commands,tasks
 import discord
 from dotenv import load_dotenv
-#import youtube_dl
 from youtube_dl import YoutubeDL
+from youtubesearchpython import VideosSearch
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
@@ -48,6 +48,11 @@ async def play(ctx,url):
         YDL_OPTIONS = {'format': 'bestaudio', 'noplaylist': 'True'}
         FFMPEG_OPTIONS = {
         'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5', 'options': '-vn'}
+        
+        videosSearch = VideosSearch(url,limit = 1)
+
+        title = videosSearch.result()['result'][0]['title']
+        url = videosSearch.result()['result'][0]['link']
 
         async with ctx.typing():
             with YoutubeDL(YDL_OPTIONS) as ydl:
@@ -56,7 +61,6 @@ async def play(ctx,url):
             URL = info['url']
 
             voice_channel.play(discord.FFmpegPCMAudio(URL, **FFMPEG_OPTIONS))
-            #voice_channel.play(discord.FFmpegPCMAudio('try.mp3'))
         await ctx.send('**Now playing: ' + info['title'] + '**')
     except:
         await ctx.send("The bot is not connected to a voice channel.")
